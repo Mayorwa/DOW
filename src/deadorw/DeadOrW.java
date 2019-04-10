@@ -54,7 +54,7 @@ public class DeadOrW extends Application {
         
         GridPane gridPane = new GridPane();    
         //Setting size for the pane 
-        gridPane.setMinSize(300, 500); 
+        gridPane.setMinSize(600, 700); 
         //Setting the padding  
         gridPane.setPadding(new Insets(10, 10, 10, 10)); 
         //Setting the vertical and horizontal gaps between the columns 
@@ -80,10 +80,7 @@ public class DeadOrW extends Application {
         int[] randArray = {10,10,10,10};
 
         for(int i=0;i<randArray.length;i++){
-            int temp = randy.nextInt(9);
-            while(temp == randArray[0] || temp == randArray[1] || temp == randArray[2] || temp == randArray[3]){
-                temp=randy.nextInt(9);
-            }
+            int temp = randy.nextInt(9);  
             randArray[i]=temp;      
         }
         return randArray;
@@ -94,10 +91,28 @@ public class DeadOrW extends Application {
         int maxTry=5;
         int indexMatch=0;
         int match=0;
-        while(maxTry>0 && indexMatch!=4){
-            int[] guess= arr;
-            indexMatch=0;
-            match=0;
+        int[] guess= arr;
+        
+        for(int i=0;i<guess.length;i++){
+            if(guess[i]==random[i]){
+                indexMatch++;
+            }
+            else if(guess[i]==random[0] || guess[i]==random[1] || guess[i]==random[2] || guess[i]==random[3]){
+                match++;
+            }
+        }
+        
+        if(indexMatch==4){
+            System.out.print("Well done! Your guess is Correct! The number is: ");
+            for(int i=0;i<guess.length;i++){
+                System.out.print(guess[i]);
+            }
+            Result("Well done! Your guess is Correct",1);
+        }
+        else{
+            Result("Sorry your guess wasnt right",0);
+        }
+        /**while(maxTry!=0 && indexMatch!=4){
             for(int i=0;i<guess.length;i++){
                 if(guess[i]==random[i]){
                     indexMatch++;
@@ -114,15 +129,15 @@ public class DeadOrW extends Application {
             }
             else{
                 maxTry--;
-                if(maxTry>1){
-                    System.out.println("You have guess "+indexMatch+" correct number in correct position,"+
+                System.out.println("You have guess "+indexMatch+" correct number in correct position,"+
                     " and "+match+" correct number in incorrect position. \n"+maxTry+" attempt remaining.");
+                Result("You have guess "+indexMatch+" correct number in correct position,"+
+                    " and "+match+" correct number in incorrect position. \n"+maxTry+" attempt remaining.");
+                if(maxTry!=0){
+                    Home(1);
                 }
-                else if(maxTry==1){
-                    System.out.println("You have guess "+indexMatch+" correct number in correct position,"+
-                    " and "+match+" correct number in incorrect position. \nLast attempt!. Good luck");
-                }
-                else{
+                else
+                {
                     System.out.println("Sorry, you failed to guess the number in 5 attempts.");
                     System.out.print("The number is: ");
                     for(int i=0;i<random.length;i++){
@@ -130,8 +145,43 @@ public class DeadOrW extends Application {
                     }
                 }
             }
-        }
+            
+            
+                
+                
+        }**/
         
+    }
+    
+    public void Result(String res,int res2){
+        Label resultLabel = new Label(res);
+        Button okay = new Button("Okay");
+        Button trya = new Button("Try Again");
+        GridPane gridPane = new GridPane(); 
+        //Setting size for the pane 
+        gridPane.setMinSize(800, 700); 
+        //Setting the Grid alignment 
+        gridPane.setAlignment(Pos.CENTER); 
+        //Arranging all the nodes in the grid
+        gridPane.add(resultLabel, 2, 0);
+        gridPane.add(okay, 3, 2);
+        
+        if(res2 == 0){
+            gridPane.add(trya, 2, 2);
+        }
+        Scene resultScene = new Scene(gridPane, 300, 500);
+        // New window (Stage)
+        Stage newWindow = new Stage();
+        newWindow.setTitle("Result");
+        newWindow.setScene(resultScene);
+        okay.setOnAction((ActionEvent e) -> {
+            newWindow.close();
+        });
+        
+        trya.setOnAction((ActionEvent e) -> {
+            Home(1);
+        });
+        newWindow.show();
     }
     
     public void Home(int type){
@@ -142,13 +192,13 @@ public class DeadOrW extends Application {
         TextField input4 = new TextField();    
         GridPane gridPane = new GridPane();    
         //Setting size for the pane 
-        gridPane.setMinSize(200, 400); 
+        gridPane.setMinSize(600, 700);  
         //Setting the padding  
         gridPane.setPadding(new Insets(10, 10, 10, 10)); 
         //Setting the vertical and horizontal gaps between the columns 
         gridPane.setVgap(5); 
         gridPane.setHgap(5);  
-        Button submit = new Button("Calculate");
+        Button submit = new Button("Submit");
         //Setting the Grid alignment 
         gridPane.setAlignment(Pos.CENTER); 
         //Arranging all the nodes in the grid
@@ -178,6 +228,7 @@ public class DeadOrW extends Application {
         });
         
         newWindow.show();
+        
     }
     
     public static void main(String[] args) {
