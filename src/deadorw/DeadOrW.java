@@ -5,6 +5,7 @@
  */
 package deadorw;
 
+import java.lang.Runnable;
 import javafx.application.Application;
 import java.util.Random;
 import java.util.Scanner;
@@ -17,11 +18,13 @@ import javafx.scene.control.Label;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 /**
@@ -29,7 +32,9 @@ import javafx.stage.Stage;
  * @author Group 9 members
  */
 public class DeadOrW extends Application {
-    
+    int p;
+    int q;
+    final Label message = new Label("");
     @Override
     public void start(Stage primaryStage) {
         Button play1 = new Button();
@@ -38,7 +43,7 @@ public class DeadOrW extends Application {
             
             @Override
             public void handle(ActionEvent event) {
-                Home(1);
+//                Home(1);
             }
         });
         
@@ -48,9 +53,22 @@ public class DeadOrW extends Application {
             
             @Override
             public void handle(ActionEvent event) {
-                System.out.println("Number 2");
+                People x = new People(1, 2);
+                People y = new People(2, 1);
+                
+                x.guess();
+                y.guess();
+                
+//                Thread thread1 = new Thread(x);
+//                Thread thread2 = new Thread(y);
+//                
+//                thread1.start();
+//                thread2.start();
             }
         });
+        Label label = new Label("Password");
+        final PasswordField pb = new PasswordField();
+        
         
         GridPane gridPane = new GridPane();    
         //Setting size for the pane 
@@ -65,7 +83,9 @@ public class DeadOrW extends Application {
         //Arranging all the nodes in the grid 
         gridPane.add(play1, 0, 2); 
         gridPane.add(play2, 1, 2); 
-        Scene scene = new Scene(gridPane);
+//         gridPane.add(label, 1, 1); 
+//        gridPane.add(pb, 2, 1); 
+        Scene scene = new Scene(gridPane,300, 500);
         primaryStage.setTitle("Welcome to dead or W");
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -74,6 +94,24 @@ public class DeadOrW extends Application {
     /**
      * @param args the command line arguments
      */
+    
+    public static void main(String[] args) {
+        launch(args);
+    }
+}
+
+class People{
+    private int p;
+    private int q;
+    int maxTry=4;
+    int[] random;
+    public People(int n1, int n2){
+      p = n1;
+      q = n2;
+    }
+//    public void run(){
+//        guess();
+//    }
     
     public static int[] numberGenerator() {
         Random randy = new Random();
@@ -87,12 +125,11 @@ public class DeadOrW extends Application {
 }
     
     public void playGame(int[] arr){
-        int[] random=numberGenerator();
-        int maxTry=5;
         int indexMatch=0;
         int match=0;
         int[] guess= arr;
         
+       
         for(int i=0;i<guess.length;i++){
             if(guess[i]==random[i]){
                 indexMatch++;
@@ -101,56 +138,63 @@ public class DeadOrW extends Application {
                 match++;
             }
         }
-        
+        maxTry--;
         if(indexMatch==4){
-            System.out.print("Well done! Your guess is Correct! The number is: ");
-            for(int i=0;i<guess.length;i++){
-                System.out.print(guess[i]);
-            }
-            Result("Well done! Your guess is Correct",1);
+            Result(indexMatch +" dead "+ match + " wounded."+maxTry+" more attempts",1);
         }
         else{
-            Result("Sorry your guess wasnt right",0);
-        }
-        /**while(maxTry!=0 && indexMatch!=4){
-            for(int i=0;i<guess.length;i++){
-                if(guess[i]==random[i]){
-                    indexMatch++;
-                }
-                else if(guess[i]==random[0] || guess[i]==random[1] || guess[i]==random[2] || guess[i]==random[3]){
-                    match++;
-                }
-            }
-            if(indexMatch==4){
-                System.out.print("Well done! Your guess is Correct! The number is: ");
-                for(int i=0;i<guess.length;i++){
-                    System.out.print(guess[i]);
-                }
-            }
-            else{
-                maxTry--;
-                System.out.println("You have guess "+indexMatch+" correct number in correct position,"+
-                    " and "+match+" correct number in incorrect position. \n"+maxTry+" attempt remaining.");
-                Result("You have guess "+indexMatch+" correct number in correct position,"+
-                    " and "+match+" correct number in incorrect position. \n"+maxTry+" attempt remaining.");
-                if(maxTry!=0){
-                    Home(1);
-                }
-                else
-                {
-                    System.out.println("Sorry, you failed to guess the number in 5 attempts.");
-                    System.out.print("The number is: ");
-                    for(int i=0;i<random.length;i++){
-                        System.out.print(random[i]);
-                    }
-                }
-            }
-            
-            
-                
-                
-        }**/
-        
+            Result(indexMatch +" dead "+ match + " wounded."+maxTry+" more attempts",0);
+        }     
+    }
+    
+    public void guess(){
+        Label secondLabel = new Label("Player "+p+" input your numbers below");
+        PasswordField input1 = new PasswordField();
+        PasswordField input2 = new PasswordField();    
+        PasswordField input3 = new PasswordField();    
+        PasswordField input4 = new PasswordField();    
+        GridPane gridPane = new GridPane();    
+        //Setting size for the pane 
+        gridPane.setMinSize(600, 700);  
+        //Setting the padding  
+        gridPane.setPadding(new Insets(10, 10, 10, 10)); 
+        //Setting the vertical and horizontal gaps between the columns 
+        gridPane.setVgap(5); 
+        gridPane.setHgap(5);  
+        Button submit = new Button("Submit");
+        //Setting the Grid alignment 
+        gridPane.setAlignment(Pos.CENTER); 
+        //Arranging all the nodes in the grid
+        gridPane.add(input1, 1, 1);
+        gridPane.add(input2, 2, 1);
+        gridPane.add(input3, 1, 2);
+        gridPane.add(input4, 2, 2);
+        gridPane.add(submit, 3, 3);
+        gridPane.add(secondLabel,2,0);
+
+//        secondLabel.setStyle("-fx-label-padding: 20;");
+        Scene secondScene = new Scene(gridPane, 300, 500);
+        // New window (Stage)
+        Stage newWindow = new Stage();
+        newWindow.setTitle("First Stage");
+        newWindow.setScene(secondScene);
+        int[] nums = new int[4];
+        submit.setOnAction((ActionEvent e) -> {
+            int val1 = Integer.parseInt(input1.getText());
+            int val2 = Integer.parseInt(input2.getText());
+            int val3 = Integer.parseInt(input3.getText());
+            int val4 = Integer.parseInt(input4.getText());
+            newWindow.close();
+            nums[0] = val1;
+            nums[1] = val2;
+            nums[2] = val3;
+            nums[3] = val4;
+           random = nums;
+           Home(q);
+        });
+
+        newWindow.show();
+
     }
     
     public void Result(String res,int res2){
@@ -167,7 +211,9 @@ public class DeadOrW extends Application {
         gridPane.add(okay, 3, 2);
         
         if(res2 == 0){
-            gridPane.add(trya, 2, 2);
+            if(maxTry > 0){
+                gridPane.add(trya, 2, 2);
+            }
         }
         Scene resultScene = new Scene(gridPane, 300, 500);
         // New window (Stage)
@@ -179,14 +225,15 @@ public class DeadOrW extends Application {
         });
         
         trya.setOnAction((ActionEvent e) -> {
-            Home(1);
+            newWindow.close();
+            Home(q);
         });
         newWindow.show();
     }
     
-    public void Home(int type){
-        Label secondLabel = new Label("Input your guesses below");
-        TextField input1 = new TextField();    
+    public void Home(int s){
+        Label secondLabel = new Label("Player "+q+" your guess below");
+        TextField input1 = new TextField();
         TextField input2 = new TextField();    
         TextField input3 = new TextField();    
         TextField input4 = new TextField();    
@@ -202,13 +249,14 @@ public class DeadOrW extends Application {
         //Setting the Grid alignment 
         gridPane.setAlignment(Pos.CENTER); 
         //Arranging all the nodes in the grid
-        gridPane.add(secondLabel, 2, 0);
-        gridPane.add(input1, 1, 1);
-        gridPane.add(input2, 2, 1);
-        gridPane.add(input3, 3, 1);
-        gridPane.add(input4, 4, 1);
-        gridPane.add(submit, 3, 2);
-
+        gridPane.add(input1, 1, 2);
+        gridPane.add(input2, 2, 2);
+        gridPane.add(input3, 3, 2);
+        gridPane.add(input4, 4, 2);
+        gridPane.add(submit, 3, 3);
+        gridPane.add(secondLabel,1,0);
+         
+//        secondLabel.setStyle("-fx-label-padding: 20;");
         Scene secondScene = new Scene(gridPane, 300, 500);
         // New window (Stage)
         Stage newWindow = new Stage();
@@ -220,6 +268,7 @@ public class DeadOrW extends Application {
             int val2 = Integer.parseInt(input2.getText());
             int val3 = Integer.parseInt(input3.getText());
             int val4 = Integer.parseInt(input4.getText());
+            newWindow.close();
             nums[0] = val1;
             nums[1] = val2;
             nums[2] = val3;
@@ -230,9 +279,4 @@ public class DeadOrW extends Application {
         newWindow.show();
         
     }
-    
-    public static void main(String[] args) {
-        launch(args);
-    }
-    
 }
